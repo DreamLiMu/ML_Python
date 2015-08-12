@@ -62,7 +62,7 @@ def majorityCnt(classList):
         if vote not in classCount.keys(): classCount[vote] = 0
         classCount[vote] += 1
     sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
-    return sortedClassCount[0][0]
+    return sortedClassCount
 
 def createTree(dataSet,labels):
     classList = [example[-1] for example in dataSet]
@@ -102,4 +102,9 @@ def grabTree(filename):
     import pickle
     fr = open(filename)
     return pickle.load(fr)
-    
+if __name__ == '__main__':
+    fr = open('lenses.txt')
+    lenses = [inst.strip().split('\t') for inst in fr.readlines()]
+    lensesLabels = ['age','prescript','astigmatic','tearRate']
+    lensesTree = createTree(lenses,lensesLabels)
+    print lensesTree

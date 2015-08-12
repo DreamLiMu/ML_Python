@@ -11,6 +11,7 @@ import operator
 #引进matplotlib
 import matplotlib
 import matplotlib.pyplot as plt
+from os import listdir
 
 # 创建数据集
 def createDataSet():
@@ -100,6 +101,34 @@ def img2Vector(filename):
             returnVect[0,32*i+j] = int(lineStr[j])
     return returnVect
 
+def handwritingClassTest(path):
+    hwLabels = []
+    trainingFileList = listdir(path+'trainingDigits')
+    m = len(trainingFileList)
+    trainingMat = zeros((m,1024))
+    for i in range(m):
+        ##以下三行为从文件名解析分类数字
+        fileNameStr = trainingFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+        hwLabels.append(classNumStr)
+        trainingMat[i,:] = img2Vector(path+'trainingDigits/'+fileNameStr)
+    testFileList = listdir(path + 'testDigits')
+    errorCount = 0.0
+    mTest = len(testFileList)
+    for i in range(mTest):
+        fileNameStr = testFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+        vectorUnderTest = img2Vector(path + 'testDigits/'+fileNameStr)
+        classifierResult = classify0(vectorUnderTest,trainingMat,hwLabels,3)
+        print "the classfifier came back with : %d, the real answer is : %d"%(classifierResult,classNumStr)
+        if(classifierResult != classNumStr):
+            errorCount += 1.0
+        print "\nthe total number of errors is:%d"%errorCount
+        print "\nthe total error rate is : %f"%(errorCount/float(mTest))
+
+
 if __name__ == '__main__':
     #画图
     path = u'../tools/Ch02/'
@@ -107,5 +136,6 @@ if __name__ == '__main__':
     #ax = fig.add_subplot(111)
     #ax.scatter(datingDataMat[:,0],datingDataMat[:,1],15.0*array(datingLabels),15.0*array(datingLabels))
     #plt.show()
-    testVect = img2Vector(path + 'testDigits/0_13.txt')
-    print testVect[0,32:63]
+    #testVect = img2Vector(path + 'testDigits/0_13.txt')
+    #print testVect[0,32:63]
+    handwritingClassTest(path)
