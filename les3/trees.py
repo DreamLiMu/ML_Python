@@ -21,7 +21,7 @@ def calcShannonEnt(dataSet):
         currentLabel = featVec[-1]
         if currentLabel not in labelCounts.keys():
             labelCounts[currentLabel] = 0
-            labelCounts[currentLabel] += 1
+        labelCounts[currentLabel] += 1
     shannonEnt = 0.0
     for key in labelCounts:
         prob = float(labelCounts[key])/numEntries
@@ -118,4 +118,4 @@ if __name__ == '__main__':
 
     lensesLabels = ['age','prescript','astigmatic','tearRate']
     lensesTree = createTree(lenses,lensesLabels)
-    print lensesTree
+    treePlotter.createPlot(lensesTree)
